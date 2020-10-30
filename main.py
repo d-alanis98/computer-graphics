@@ -15,6 +15,11 @@ parser.add_argument('-n', '--naive', help='Use naive solution algorithm', action
 parser.add_argument('-d', '--dda', help='Use DDA algorithm', action='store_true')
 # Bresenham algorithm
 parser.add_argument('-b', '--bresenham', help='Use Bresenham algorithm', action='store_true')
+# POINTS 
+parser.add_argument('-x', '--x1', help='X coordinate of the first point')
+parser.add_argument('-y', '--y1', help='Y coordinate of the first point')
+parser.add_argument('-X', '--x2', help='X coordinate of the second point')
+parser.add_argument('-Y', '--y2', help='Y coordinate of the second point')
 
 
 # Read arguments from the command line
@@ -57,16 +62,19 @@ def setAlgorithmToUse():
 
 def getLinePoints():
     global x1, y1, x2, y2
-    x1 = int(input('Enter x1: '))
-    y1 = int(input('Enter y1: '))
-    x2 = int(input('Enter x2: '))
-    y2 = int(input('Enter y2: '))
+    x1 = args.x1
+    y1 = args.y1
+    x2 = args.x2
+    y2 = args.y2
 
 
 def main():
     setAlgorithmToUse()
     getLinePoints()
-    algorithm.drawLine(x1, y1, x2, y2)
+    for j in range (1080):
+        algorithm.setPixel(0, j, 255, 243, 210) 
+    algorithm.write()
+    # algorithm.drawLine(x1, y1, x2, y2)
 
 
 if __name__ == '__main__':
