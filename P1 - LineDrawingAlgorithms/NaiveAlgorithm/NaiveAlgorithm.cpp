@@ -25,8 +25,6 @@ void NaiveAlgorithm::drawLine(
     //Initial points
     setPixel(x1, y1, r, g, b);
     setPixel(x2, y2, r, g, b);
-       
-    y = m*x1 + be; //Line equation
 
     //x2 - x1 cannot be 0, in that case, we need to draw a vertical line
     if((x2 - x1) == 0) {

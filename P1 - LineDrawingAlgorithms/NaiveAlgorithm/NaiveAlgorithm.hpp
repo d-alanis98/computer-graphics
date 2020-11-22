@@ -18,6 +18,4 @@ class NaiveAlgorithm: public FHDRaster {
         );
 };
 
-
-
 #endif
