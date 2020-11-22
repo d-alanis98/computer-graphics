@@ -5,8 +5,6 @@
 
 class NaiveAlgorithm: public FHDRaster {
     public:
-        static const int rasterWidth = RASTER_WIDTH;
-        static const int rasterHeight = RASTER_HEIGHT;
         void drawLine( 
             unsigned int, 
             unsigned int, 

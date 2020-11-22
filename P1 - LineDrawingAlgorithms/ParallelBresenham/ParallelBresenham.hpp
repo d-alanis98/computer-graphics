@@ -1,10 +1,12 @@
-#ifndef BRESENHAM_ALGORITHM_H
-#define BRESENHAM_ALGORITHM_H
+#ifndef PARALLEL_BRESENHAM_ALGORITHM_H
+#define PARALLEL_BRESENHAM_ALGORITHM_H
 
 #include "../FHDRaster/FHDRaster.hpp"
 
-class BresenhamAlgorithm: public FHDRaster {
+class ParallelBresenham: public FHDRaster {
     public:
+        static const int rasterWidth = RASTER_WIDTH;
+        static const int rasterHeight = RASTER_HEIGHT;
         void drawLine( 
             unsigned int, 
             unsigned int, 

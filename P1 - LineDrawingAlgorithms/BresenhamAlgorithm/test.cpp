@@ -36,6 +36,5 @@ int main() {
     //Eight octant
     for(int x = 0; x < centerInX; x += (centerInX / 10))
         raster->drawLine(centerInX, centerInY, x, 0, r, g, b);
-
     raster->write();
 }

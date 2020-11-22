@@ -11,6 +11,8 @@ class FHDRaster {
     private:
         unsigned char data[RASTER_WIDTH][RASTER_HEIGHT][PRIMARY_COLORS];
     public:
+        static const int rasterWidth = RASTER_WIDTH;
+        static const int rasterHeight = RASTER_HEIGHT;
         FHDRaster(void);
         void setPixel(
             unsigned int, 
