@@ -2,11 +2,15 @@
 #define PARALLEL_BRESENHAM_ALGORITHM_H
 
 #include "../FHDRaster/FHDRaster.hpp"
+#include "../BresenhamAlgorithm/BresenhamAlgorithm.hpp"
 
 class ParallelBresenham: public FHDRaster {
+    private:
+        unsigned int lineSegmentX[3];
+        unsigned int lineSegmentY[3];
+        BresenhamAlgorithm *raster;
     public:
-        static const int rasterWidth = RASTER_WIDTH;
-        static const int rasterHeight = RASTER_HEIGHT;
+        ParallelBresenham(void);
         void drawLine( 
             unsigned int, 
             unsigned int, 
@@ -16,6 +20,14 @@ class ParallelBresenham: public FHDRaster {
             unsigned char,
             unsigned char
         );
+        void divideLine(
+            unsigned int,
+            unsigned int,
+            unsigned int,
+            unsigned int
+        );
+        BresenhamAlgorithm *getRaster();
+    
 };
 
 #endif
