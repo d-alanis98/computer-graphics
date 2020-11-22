@@ -2,4 +2,6 @@
 *.out
 *.
 *.obj
+*.o
+*.ppm
 raster
