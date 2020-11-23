@@ -5,17 +5,16 @@
 
 class Edge {
     private:
-        Vertex firstVertex;
-        Vertex secondVertex;
+        Vertex *firstVertex;
+        Vertex *secondVertex;
     public:
-        Edge();
-        Edge(Vertex, Vertex);
-        Vertex getFirstVertex();
-        Vertex getSecondVertex();
+        Edge(Vertex *, Vertex *);
+        Vertex *getFirstVertex();
+        Vertex *getSecondVertex();
         double getSizeInX();
         double getSizeInY();
         double getSizeInZ();
-        void setVertices(Vertex, Vertex);
+        void setVertices(Vertex *, Vertex *);
 };
 
 #endif

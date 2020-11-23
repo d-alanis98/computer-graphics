@@ -6,12 +6,15 @@ class Vertex {
         double x;
         double y;
         double z;
-    private:
+    public:
+        //Constructors
         Vertex();
         Vertex(double, double, double);
+        //Getters
         double getX();
         double getY();
         double getZ();
+        //Setter
         void setCoordinates(double, double, double);
 };
 

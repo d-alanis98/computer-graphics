@@ -1,41 +1,18 @@
 #ifndef OBJ_READER_H
 #define OBJ_READER_H
 
-#include <map>
+#include <vector>
 #include <string>
+#include "../utils/FileReader/FileReader.hpp"
 
-#include "../utils/Vertex/Vertex.hpp"
-#include "../utils/Edge/Edge.hpp"
-#include "../utils/Face/Face.hpp"
+using namespace std;
 
-class OBJReader {
-    private:
-        string filePath;
-        map<unsigned int, Vertex*> listOfVertices;
-        map<unsigned int, Edge*> listOfEdges;
-        map<unsigned int, Face*> listOfFaces;
-        double maximumPointInX;
-        double maximumPointInY;
-        double maximumPointInZ;
-        double minimumPointInX;
-        double minimumPointInY;
-        double minimumPointInZ;
+class OBJReader: public FileReader {
     public:
-        OBJReader(string);
-        void readFile();
-        //Bounding box
-        void computeBoundingBox();
-        double getMaximumPointInX();
-        double getMaximumPointInY();
-        double getMaximumPointInZ();
-        double getMinimumPointInX();
-        double getMaximumPointInY();
-        double getMinimumPointInZ();
-        //List getters
-        map<unsigned int, Vertex*> getListOfVertexes();
-        map<unsigned int, Edge*> getListOfEdges();
-        map<unsigned int, Face*> getListOfFaces();
-
+        int getDataFromFile(string &);
+        void getEdgesFromFaceVertices();
+        vector<int> getVerticesKeysList(string);
+        void createEdge(int, int, vector<Vertex *>, unsigned int *);
 };
 
 #endif
