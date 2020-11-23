@@ -1,0 +1,2 @@
+test: ../P2-ReadOBJ/OBJReader.cpp ../utils/FileReader/FileReader.cpp ../utils/Vertex/Vertex.cpp ../utils/Edge/Edge.cpp ../utils/Face/Face.cpp ../utils/Utils/Utils.cpp FHDRaster.o ../utils/Transformations/Transformations.cpp BresenhamAlgorithm.o 
+	g++ OBJToPPM.cpp -o test ../P2-ReadOBJ/OBJReader.cpp ../utils/FileReader/FileReader.cpp ../utils/Vertex/Vertex.cpp ../utils/Edge/Edge.cpp ../utils/Face/Face.cpp ../utils/Utils/Utils.cpp FHDRaster.o ../utils/Transformations/Transformations.cpp BresenhamAlgorithm.o

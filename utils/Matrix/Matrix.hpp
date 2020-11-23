@@ -48,4 +48,6 @@ template <typename T> class Matrix {
 
 };
 
+#include "Matrix.cpp"
+
 #endif

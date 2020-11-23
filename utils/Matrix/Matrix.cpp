@@ -1,7 +1,8 @@
 #ifndef __QS_MATRIX_CPP
 #define __QS_MATRIX_CPP
 
-#include "Matrix.h"
+#include <iostream>
+#include "Matrix.hpp"
 
 // Parameter Constructor                                                                                                                                                      
 template<typename T>
@@ -257,14 +258,14 @@ unsigned Matrix<T>::getColumns() const {
   return this->cols;
 }
 
-
 template<typename T>
-unsigned Matrix<T>::print() {
+void Matrix<T>::print() {
   for(int i = 0; i < this->rows; i++) {
-    for(int j = 0; j < this->columns; j++)
-      cout << this->mat[i][j];
-    cout << endl;
+    for(int j = 0; j < this->cols; j++)
+      std::cout << this->mat[i][j] << " ";
+    std::cout << std::endl;
   }
 }
+
 
 #endif
