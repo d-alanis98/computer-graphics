@@ -1,0 +1,2 @@
+test: OBJToVLF.cpp ../P2-ReadOBJ/OBJReader.cpp ../utils/FileReader/FileReader.cpp ../utils/Vertex/Vertex.cpp ../utils/Edge/Edge.cpp ../utils/Face/Face.cpp ../utils/Utils/Utils.cpp 
+	g++ test.cpp -o test OBJToVLF.cpp ../P2-ReadOBJ/OBJReader.cpp ../utils/FileReader/FileReader.cpp ../utils/Vertex/Vertex.cpp ../utils/Edge/Edge.cpp ../utils/Face/Face.cpp ../utils/Utils/Utils.cpp

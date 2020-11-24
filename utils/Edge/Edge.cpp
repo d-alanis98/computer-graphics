@@ -10,12 +10,25 @@ Edge::Edge(Vertex *firstVertex, Vertex *secondVertex) {
     this->secondVertex = secondVertex;
 }
 
+Edge::Edge(unsigned int firstVertexKey, unsigned int secondVertexKey) {
+    this->firstVertexKey = firstVertexKey;
+    this->secondVertexKey = secondVertexKey;
+}
+
 Vertex *Edge::getFirstVertex() {
     return firstVertex;
 }
 
 Vertex *Edge::getSecondVertex() {
     return secondVertex;
+}
+
+unsigned int Edge::getFirstVertexKey() {
+    return firstVertexKey;
+}
+
+unsigned int Edge::getSecondVertexKey() {
+    return secondVertexKey;
 }
 
 double Edge::getSizeInX() {
@@ -39,4 +52,9 @@ double Edge::getSizeInZ() {
 void Edge::setVertices(Vertex *firstVertex, Vertex *secondVertex) {
     this->firstVertex = firstVertex;
     this->secondVertex = secondVertex;
+}
+
+void Edge::setVertices(unsigned int firstVertexKey, unsigned int secondVertexKey) {
+    this->firstVertexKey = firstVertexKey;
+    this->secondVertexKey = secondVertexKey;
 }
