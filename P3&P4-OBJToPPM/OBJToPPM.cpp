@@ -77,7 +77,7 @@ void OBJToPPM::drawOBJToRaster() {
         //Finally, we draw the edge
         raster->drawLine(x1, y1, x2, y2, r, g, b);
     }
-    //We pipe the raster to stdout
+    //We generate the PPM output
     raster->write();
 }
 
@@ -90,6 +90,8 @@ void OBJToPPM::applyTransformationsToVertex(Vertex *vertexToTransform, unsigned 
     Transformations *vertexTransformation = new Transformations();
     vertexTransformation->setInitialValues(vertexX, vertexY, vertexZ);
     vertexTransformation->scale(optimalScale, optimalScale, optimalScale);
+    //To get the model in correct orientation
+    vertexTransformation->rotateX(180);
     vertexTransformation->translateTo(pointToTranslateInX, pointToTranslateInY, 0);
 
     vertexTransformation->makeProjection(500);
