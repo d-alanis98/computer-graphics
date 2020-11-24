@@ -121,15 +121,17 @@ void Transformations::makeProjection(double focalLength) {
     Matrix<double> projectionMatrix(4, 4, 0);
     Matrix<double> coordinatesMatrix = getCoordinatesMatrix();
     //We set the projection matrix
-    for(int i = 0; i < 3; i++)
-        projectionMatrix(i, i) = focalLength;
-    projectionMatrix(3, 0) = 1;
+    for(int i = 0; i < 4; i++) {
+        //projectionMatrix(i, i) = focalLength; //Perspective projection, i < 3
+        projectionMatrix(i, i) = 1;
+    }
+    //projectionMatrix(3, 0) = 1; //Perspective projection
     //We make the operation
     Matrix<double> result = projectionMatrix * coordinatesMatrix;
     //We return from the homogeneous space and update the values of (x, y, z , w)
     for(int i = 0; i < 3; i++)
         this->values[i] = result(i, 0) / result(3, 0); //Value / w
     //X now is Y, and Y is Z, because camera is pointing at (1, 0, 0)
-    this->x = (unsigned int)values[1];
-    this->y = (unsigned int)values[2];
+    this->x = (unsigned int)values[0];
+    this->y = (unsigned int)values[1];
 }
