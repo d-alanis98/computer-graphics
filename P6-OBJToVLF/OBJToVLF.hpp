@@ -21,10 +21,8 @@ class OBJToVLF {
         map<unsigned int, Face*> vlfListOfFaces;
     public:
         OBJToVLF();
+        //File creation
         void readOBJFile(string);
-        //TEMP
-        void readVLFFile(string );
-        //END TEMP
         void createVLFFile(string);
         void writeListOfVertices(ofstream *);
         void writeListOfEdges(ofstream *);
@@ -34,12 +32,26 @@ class OBJToVLF {
         void readListOfEdges(ifstream *, unsigned int); 
         void readListOfFaces(ifstream *, unsigned int);
         //END TEMP 
-        void generateTriangularFaces();
-        void printRetrievedDataFromOBJ();
+        //VLF lists creation
+        void setVLFEdgesList(); 
+        void setVLFFacesList();
+        void addEdgeToTheList(Edge *); 
+        void addFaceToTheList(Face *);
+        //Face conditioning
+        void createTriangularFace(vector<Vertex *>); 
+        void generateTriangularFaces(vector<Vertex*>);
         //Getters
         map<unsigned int, Vertex*> getListOfVertices();
         map<unsigned int, Edge*> getListOfEdges();
         map<unsigned int, Face*> getListOfFaces();
+        //Search
+        unsigned int keyOfVertex(Vertex *);
+        unsigned int keyOfEdge(Edge *);
+        //Utils
+        void printResults();
+        void printRetrievedDataFromOBJ();
+        void printVLFFileInformation(string);
+        
 };
 
 #endif

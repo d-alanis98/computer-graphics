@@ -17,6 +17,7 @@ int main(int argc, char **argv) {
     transformer->readOBJFile(filePath);
     transformer->printRetrievedDataFromOBJ();
     transformer->createVLFFile(vlfPath);
-    transformer->readVLFFile(vlfPath);
+    transformer->printResults();
+    transformer->printVLFFileInformation(vlfPath);
     return 0;
 }

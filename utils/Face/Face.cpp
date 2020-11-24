@@ -16,8 +16,20 @@ Face::Face(vector<Vertex*> vertices) {
     this->vertices = vertices;
 }
 
+Face::Face(unsigned int firstEdgeKey, unsigned int secondEdgeKey, unsigned int thirdEdgeKey) {
+    this->firstEdgeKey = firstEdgeKey;
+    this->secondEdgeKey = secondEdgeKey;
+    this->thirdEdgeKey = thirdEdgeKey;
+}
+
 void Face::setEdges(vector<Edge*> edges) {
     this->edges = edges;
+}
+
+void Face::setEdgesKeys(unsigned int firstEdgeKey, unsigned int secondEdgeKey, unsigned int thirdEdgeKey) {
+    this->firstEdgeKey = firstEdgeKey;
+    this->secondEdgeKey = secondEdgeKey;
+    this->thirdEdgeKey = thirdEdgeKey;
 }
 
 void Face::setVertices(vector<Vertex*> vertices) {
@@ -30,6 +42,18 @@ vector<Edge*> Face::getEdges() {
 
 vector<Vertex*> Face::getVertices() {
     return vertices;
+}
+
+unsigned int Face::getFirstEdgeKey() {
+    return firstEdgeKey;
+}
+
+unsigned int Face::getSecondEdgeKey() {
+    return secondEdgeKey;
+}
+
+unsigned int Face::getThirdEdgeKey() {
+    return thirdEdgeKey;
 }
 
 double Face::getFaceNormal() {
