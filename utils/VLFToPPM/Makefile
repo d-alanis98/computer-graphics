@@ -1,0 +1,2 @@
+test: VLFToPPM.cpp ../VLFReader/VLFReader.cpp ../FileReader/FileReader.cpp ../Vertex/Vertex.cpp ../Edge/Edge.cpp ../Face/Face.cpp FHDRaster.o BresenhamAlgorithm.o ../Transformations/Transformations.cpp
+	g++ test.cpp -o test VLFToPPM.cpp ../VLFReader/VLFReader.cpp ../FileReader/FileReader.cpp ../Vertex/Vertex.cpp ../Edge/Edge.cpp ../Face/Face.cpp FHDRaster.o BresenhamAlgorithm.o ../Transformations/Transformations.cpp
