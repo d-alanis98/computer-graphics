@@ -23,6 +23,7 @@ OBJToPPM::OBJToPPM() {
     //Parameters for transformations
     optimalScale = 1;
     pointToTranslateInX = pointToTranslateInY = 0;
+    degreesToRotate = 180;
     //We create an instance of the raster
     raster = new BresenhamAlgorithm();
 }
@@ -91,7 +92,7 @@ void OBJToPPM::applyTransformationsToVertex(Vertex *vertexToTransform, unsigned 
     vertexTransformation->setInitialValues(vertexX, vertexY, vertexZ);
     vertexTransformation->scale(optimalScale, optimalScale, optimalScale);
     //To get the model in correct orientation
-    vertexTransformation->rotateX(180);
+    vertexTransformation->rotateX(degreesToRotate);
     vertexTransformation->translateTo(pointToTranslateInX, pointToTranslateInY, 0);
 
     vertexTransformation->makeProjection(500);
@@ -122,5 +123,9 @@ double OBJToPPM::getTranslationPointInX() {
 
 double OBJToPPM::getTranslationPointInY() {
     return -1 * optimalScale * minimumPointInY;
+}
+
+void OBJToPPM::setDegreesToRotate(double degreesToRotate) {
+    this->degreesToRotate = degreesToRotate;
 }
 

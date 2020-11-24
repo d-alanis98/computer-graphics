@@ -14,7 +14,7 @@ class OBJToPPM {
         double modelWidth, modelHeight;
         double minimumPointInX, minimumPointInY;
         //Transformations
-        double optimalScale, pointToTranslateInX, pointToTranslateInY;
+        double optimalScale, degreesToRotate, pointToTranslateInX, pointToTranslateInY;
         //List of edges
         map<unsigned int, Edge*> listOfEdges;
         //The raster
@@ -24,6 +24,7 @@ class OBJToPPM {
         void setDataFromFile(string);
         void drawOBJToRaster();
         double getOptimalScale(double, double);
+        void setDegreesToRotate(double);
         double getScaleToApplyInX();
         double getScaleToApplyInY();
         double getTranslationPointInX();

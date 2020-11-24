@@ -6,3 +6,5 @@
 *.ppm
 raster
 test
+*.avi
+animation/
