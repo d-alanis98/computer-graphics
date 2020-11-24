@@ -1,0 +1,2 @@
+test: VLFReader.cpp ../FileReader/FileReader.cpp ../Vertex/Vertex.cpp ../Edge/Edge.cpp ../Face/Face.cpp
+	g++ test.cpp -o test VLFReader.cpp ../FileReader/FileReader.cpp ../Vertex/Vertex.cpp ../Edge/Edge.cpp ../Face/Face.cpp
