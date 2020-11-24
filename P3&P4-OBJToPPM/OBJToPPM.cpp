@@ -56,6 +56,9 @@ void OBJToPPM::setOptimalTransformationParameters() {
     //Translation
     pointToTranslateInX = getTranslationPointInX();
     pointToTranslateInY = getTranslationPointInY();
+
+    pointToTranslateInX += (raster->rasterWidth - 2 * pointToTranslateInX) / 2;
+    pointToTranslateInY += (raster->rasterHeight - 2 * pointToTranslateInY) / 2;
 }
 
 
