@@ -14,6 +14,7 @@ int main(int argc, char **argv) {
     //We create a new VLFToPPM instance and initialize the process of drawing the VLF to the raster
     VLFToPPM *drawer = new VLFToPPM();
     drawer->setDataFromFile(filePath);
+    drawer->setPixelsToDraw();
     drawer->drawVLFToRaster();
     
     return 0;

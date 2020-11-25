@@ -1,0 +1,2 @@
+test: ScanLine/ScanLine.cpp ../utils/VLFToPPM/VLFToPPM.cpp ../utils/VLFReader/VLFReader.cpp ../utils/FileReader/FileReader.cpp ../utils/Vertex/Vertex.cpp ../utils/Edge/Edge.cpp ../utils/Face/Face.cpp FHDRaster.o BresenhamAlgorithm.o ../utils/Transformations/Transformations.cpp
+	g++ test.cpp -o test ScanLine/ScanLine.cpp ../utils/VLFToPPM/VLFToPPM.cpp ../utils/VLFReader/VLFReader.cpp ../utils/FileReader/FileReader.cpp ../utils/Vertex/Vertex.cpp ../utils/Edge/Edge.cpp ../utils/Face/Face.cpp FHDRaster.o BresenhamAlgorithm.o ../utils/Transformations/Transformations.cpp

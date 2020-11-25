@@ -8,4 +8,5 @@ raster
 test
 *.avi
 animation/
+models/
 *.vlf

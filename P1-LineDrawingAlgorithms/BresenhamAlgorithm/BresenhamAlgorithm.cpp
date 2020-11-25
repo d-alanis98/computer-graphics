@@ -1,9 +1,10 @@
 #include <iostream>
+#include <set>
 #include "BresenhamAlgorithm.hpp"
 
 using namespace std;
 
-
+typedef pair<unsigned int, unsigned int> Pixel;
 
 void BresenhamAlgorithm::drawLine( 
     unsigned int x, 
@@ -14,10 +15,13 @@ void BresenhamAlgorithm::drawLine(
     unsigned char g,
     unsigned char b
 ){
+
     int width = x2 - x;
     int heigth = y2 - y;
     int dx1 = 0, dy1 = 0, dx2 = 0, dy2 = 0;
 
+    //We clear the list of pixels to draw
+    pixelsToDraw.clear();
     /*
         Increments in X axis
         x2 - x < 0 in 5th, 6th, 7th and 8th octant, and x2 - x > 0 in 1st, 2nd, 3rd and 4th octant
@@ -53,6 +57,8 @@ void BresenhamAlgorithm::drawLine(
     //We start from 0 (the origin of the octants) to the biggest dimension (width or height)
     for(int i = 0; i <= longest; i++) {
         setPixel(x, y, r, g, b);
+        //We also add it to the list of pixels
+        addPixelToDraw(x, y);
         //We sum the shortest dimension value to the half variable
         half += shortest;
         // If the new half is bigger than the longest value, this mean that we have surpased the limit, so we need to move in the required direction (backward or forward in X or Y)
@@ -71,4 +77,14 @@ void BresenhamAlgorithm::drawLine(
             y += dy2;
         }
     }
+}
+
+
+
+void BresenhamAlgorithm::addPixelToDraw(unsigned int x, unsigned int y) {
+    pixelsToDraw.insert(Pixel(x, y));
+}
+
+set<Pixel> BresenhamAlgorithm::getPixelsToDraw() {
+    return pixelsToDraw;
 }

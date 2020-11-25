@@ -41,8 +41,10 @@ void VLFToPPM::setDataFromFile(string filePath) {
     modelHeight = reader->getObjectHeight();
     minimumPointInX = reader->getMinimumPointInX();
     minimumPointInY = reader->getMinimumPointInY();
-    //We set the list of edges
+    //We set the list of 
+    listOfVertices = reader->getListOfVertices();
     listOfEdges = reader->getListOfEdges();
+    listOfFaces = reader->getListOfFaces();
     //We set the optimal transformation parameters with the obtained data
     setOptimalTransformationParameters();
     return;
@@ -63,7 +65,13 @@ void VLFToPPM::setOptimalTransformationParameters() {
 }
 
 
-void VLFToPPM::drawVLFToRaster() {
+void VLFToPPM::setPixelsToDraw() {
+    //Only sets the pixels in the raster's local state, we don't want to keep them in the local list
+    //It makes the process a little bit faster
+    setPixelsToDraw(false);
+}
+
+void VLFToPPM::setPixelsToDraw(bool keepTrackInState) {
     unsigned char r = 255, g = 255, b = 255;
     for(map<unsigned int, Edge*>::iterator it = listOfEdges.begin(); it != listOfEdges.end(); it++) {
         unsigned int x1, y1, x2, y2;
@@ -75,14 +83,40 @@ void VLFToPPM::drawVLFToRaster() {
         //And apply the transformations to them
         applyTransformationsToVertex(firstVertex, &x1, &y1);
         applyTransformationsToVertex(secondVertex, &x2, &y2);
-        //Finally, we draw the edge
+        //Finally, we set the pixels to draw
         raster->drawLine(x1, y1, x2, y2, r, g, b);
+        //And, if specified, we add those pixels to the state (because the other ones lives in the raster instance and they are generated for every line, so we need a global list of all pixels) 
+        if(keepTrackInState)
+            addPixelsToDraw(raster->getPixelsToDraw());
     }
-    //We generate the PPM output
+}
+
+void VLFToPPM::setTotalPixelsToDraw() {
+    //In this case, we want to create the global set of pixels (all the pixels that are required to recreate the figure in the raster)
+    setPixelsToDraw(true);
+}
+
+void VLFToPPM::addPixelsToDraw(set<Pixel> edgePixels) {
+    for(Pixel pix : edgePixels)
+        pixelsToDraw.insert(pix);
+}
+
+void VLFToPPM::drawVLFToRaster() {
+    setPixelsToDraw();
     raster->write();
 }
 
-void VLFToPPM::applyTransformationsToVertex(Vertex *vertexToTransform, unsigned int *resultX, unsigned int *resultY) {
+void VLFToPPM::applyTransformationsToAllVertices() {
+    unsigned int transformedVerticesCount = 1;
+    for(map<unsigned int, Vertex*>::iterator it = listOfVertices.begin(); it != listOfVertices.end(); it++) {
+        Vertex *transformedVertex = it->second;
+        applyTransformationsToVertex(transformedVertex, 0, 0);
+        listOfTransformedVertices.insert(pair<unsigned int, Vertex*>(transformedVerticesCount, transformedVertex));
+        transformedVerticesCount++;
+    }
+}
+
+void VLFToPPM::applyTransformationsToVertex(Vertex *vertexToTransform, unsigned int *resultX = 0, unsigned int *resultY = 0) {
     //We get the vertex coordinates
     double vertexX = vertexToTransform->getX();
     double vertexY = vertexToTransform->getY();
@@ -94,11 +128,18 @@ void VLFToPPM::applyTransformationsToVertex(Vertex *vertexToTransform, unsigned 
     //To get the model in correct orientation
     vertexTransformation->rotateX(degreesToRotate);
     vertexTransformation->translateTo(pointToTranslateInX, pointToTranslateInY, 0);
-
+    //We make the projection
     vertexTransformation->makeProjection(500);
-    //We set the values in resultX and resultY
-    *resultX = vertexTransformation->getX();
-    *resultY = vertexTransformation->getY();
+    //We get the final X and Y (the result of the transformation to fit in the raster)
+    double x = vertexTransformation->getX();
+    double y = vertexTransformation->getY();
+    //If the pointer to the result integers is supplied, we set the values in resultX and resultY
+    if(resultX != 0 && resultY != 0) {
+        *resultX = x;
+        *resultY = y;
+    } else { //Otherwise, we set them in the vertex directly, via its setCoordinates method
+        vertexToTransform->setCoordinates(x, y, 0);
+    }
     return;
 }
 
@@ -129,3 +170,26 @@ void VLFToPPM::setDegreesToRotate(double degreesToRotate) {
     this->degreesToRotate = degreesToRotate;
 }
 
+BresenhamAlgorithm *VLFToPPM::getRaster() {
+    return raster;
+}
+
+set<Pixel> VLFToPPM::getPixelsToDraw() {
+    return pixelsToDraw;
+}
+
+map<unsigned int, Vertex*> VLFToPPM::getListOfVertices() {
+     return listOfVertices;
+}
+
+map<unsigned int, Edge*> VLFToPPM::getListOfEdges() {
+    return listOfEdges;
+}
+
+map<unsigned int, Face*> VLFToPPM::getListOfFaces() {
+    return listOfFaces;
+}
+
+map<unsigned int, Vertex*> VLFToPPM::getListOfTransformedVertices() {
+    return listOfTransformedVertices;
+}
