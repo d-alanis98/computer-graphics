@@ -92,7 +92,7 @@ void VLFToPPM::setPixelsToDraw(bool keepTrackInState) {
 }
 
 void VLFToPPM::setTotalPixelsToDraw() {
-    //In this case, we want to create the global set of pixels (all the pixels that are required to recreate the figure in the raster)
+    //In this case, we want to create the global set of pixels (all the pixels that are required to recreate the figure in the raster, for algorithms like ScanLine or Zbuffer)
     setPixelsToDraw(true);
 }
 
