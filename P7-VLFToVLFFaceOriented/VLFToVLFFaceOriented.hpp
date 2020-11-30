@@ -3,7 +3,9 @@
 
 #include <iostream>
 #include <map>
+#include <vector>
 #include <string>
+#include <fstream>
 #include "../utils/Edge/Edge.hpp"
 #include "../utils/Vertex/Vertex.hpp"
 #include "../utils/Face/Face.hpp"
@@ -11,16 +13,30 @@
 using namespace std;
 
 class VLFToVLFFaceOriented {
-
-    public:
-        //List of edges
+    private:
+        //From VLF
+        map<unsigned int, Vertex*> listOfVertices;
         map<unsigned int, Edge*> listOfEdges;
-        //List of the raw vertices and the transformed vertices (the ones that fit in the raster)
-        map<unsigned int, Vertex*> listOfVertices, listOfTransformedVertices;
-        //List of faces
         map<unsigned int, Face*> listOfFaces;
+        //VLF Face oriented lists
+        map<unsigned int, Vertex*> vlfListOfVertices;
+        map<unsigned int, Edge*> vlfListOfEdges;
+        map<unsigned int, Face*> vlfListOfFaces;
+    public:
+        //Constructor
         VLFToVLFFaceOriented();
+        //File creation
         void setInitialDataFromFile(string);
+        void writeListOfVertices(ofstream *);
+        void writeListOfEdges(ofstream *);
+        void writeListOfFaces(ofstream *);
+        void createVLFFaceOrientedFile(string);
+        void setEdgesAndFacesWithCorrectedOrientation();
+        //Calculations
+        vector<double> getFaceNormal(Face *);
+        //VLF lists creation
+        void addEdgeToTheVLFFaceOrientedList(Edge *); 
+        void addFaceToTheVLFFaceOrientedList(Face *);
 };
 
 

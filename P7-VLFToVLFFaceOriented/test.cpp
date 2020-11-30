@@ -5,18 +5,16 @@
 using namespace std;
 
 int main(int argc, char **argv) {
-    if(argc != 2) {
-        cout << "Usage mode: ./test pathToVLFFile" << endl;
+    if(argc != 3) {
+        cout << "Usage mode: ./test pathToVLFFile resultVLFFileName" << endl;
         exit(1);
     }
 
     string pathToFile = argv[1];
+    string resultVLFFileName = argv[2];
     //We create a new VLFToVLFFaceOriented instance
     VLFToVLFFaceOriented *reader = new VLFToVLFFaceOriented();
     reader->setInitialDataFromFile(pathToFile);
     
-    cout << "Number of vertices = " << reader->listOfVertices.size() << endl;
-    cout << "Number of edges = " << reader->listOfEdges.size() << endl;
-    cout << "Number of faces = " << reader->listOfFaces.size() << endl;
     return 0;
 }

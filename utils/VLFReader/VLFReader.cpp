@@ -14,7 +14,16 @@
 using namespace std;
 
 
+int VLFReader::getDataFromFileWithKeys(string &filePath) {
+    return getDataFromFile(filePath, true);
+}
+
+//To read the VLF file without preserving the keys (vertex or edge key), but the full instance
 int VLFReader::getDataFromFile(string &filePath) {
+    return getDataFromFile(filePath, false);
+}
+
+int VLFReader::getDataFromFile(string &filePath, bool preserveKeys) {
     unsigned int totalVertices;
     unsigned int totalEdges;
     unsigned int totalFaces;
@@ -24,8 +33,8 @@ int VLFReader::getDataFromFile(string &filePath) {
     binaryFile.read(reinterpret_cast<char*>(&totalEdges), sizeof(unsigned int));
     binaryFile.read(reinterpret_cast<char*>(&totalFaces), sizeof(unsigned int));
     readListOfVertices(&binaryFile, totalVertices);
-    readListOfEdges(&binaryFile, totalEdges);
-    readListOfFaces(&binaryFile, totalFaces);
+    readListOfEdges(&binaryFile, totalEdges, preserveKeys);
+    readListOfFaces(&binaryFile, totalFaces, preserveKeys);
     binaryFile.close();
     return 0;
 }
@@ -57,18 +66,23 @@ void VLFReader::readListOfVertices(ifstream *binaryFile, unsigned int totalVerti
     }
 } 
 
-void VLFReader::readListOfEdges(ifstream *binaryFile, unsigned int totalEdges) {
+void VLFReader::readListOfEdges(ifstream *binaryFile, unsigned int totalEdges, bool preserveKeys = false) {
     for(int i = 1; i <= totalEdges; i++) {
         unsigned int firstVertex, secondVertex;
         binaryFile->read(reinterpret_cast<char*>(&firstVertex), sizeof(unsigned int));
         binaryFile->read(reinterpret_cast<char*>(&secondVertex), sizeof(unsigned int));
         //We create the edge to add
         Edge *edgeToAdd = new Edge(listOfVertices[firstVertex], listOfVertices[secondVertex]);
-        addEdgeToTheList(edgeToAdd);
+        //An instance with the vertices keys instead of the full object's data
+        Edge *edgeWithVerticesKey = new Edge(firstVertex, secondVertex);
+        //We define the edge to add, the full one or the one with just the keys, based on the preserveKeys value
+        if(!preserveKeys)
+            addEdgeToTheList(edgeToAdd);
+        else addEdgeToTheList(edgeWithVerticesKey);
     }
 } 
 
-void VLFReader::readListOfFaces(ifstream *binaryFile, unsigned int totalFaces) {
+void VLFReader::readListOfFaces(ifstream *binaryFile, unsigned int totalFaces, bool preserveKeys = false) {
     for(int i = 1; i <= totalFaces; i++) {
         unsigned int firstEdgeKey, secondEdgeKey, thirdEdgeKey;
         vector<Edge*> faceEdges;
@@ -82,6 +96,11 @@ void VLFReader::readListOfFaces(ifstream *binaryFile, unsigned int totalFaces) {
         faceEdges.push_back(listOfEdges[thirdEdgeKey]);
         //We create the face to add
         Face *faceToAdd = new Face(faceEdges);
-        addFaceToTheList(faceToAdd);
+        //An instance with the edges keys instead of the full object's data
+        Face *faceWithEdgesKey = new Face(firstEdgeKey, secondEdgeKey, thirdEdgeKey);
+        //We define the edge to add, the full one or the one with just the keys, based on the preserveKeys value
+        if(!preserveKeys)
+            addFaceToTheList(faceToAdd);
+        else addFaceToTheList(faceWithEdgesKey);
     }
 } 

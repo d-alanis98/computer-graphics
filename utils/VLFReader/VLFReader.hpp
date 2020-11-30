@@ -8,12 +8,14 @@
 class VLFReader: public FileReader {
     public:
         int getDataFromFile(string &);
+        int getDataFromFile(string &, bool);
+        int getDataFromFileWithKeys(string &);
         void addVertexToTheList(Vertex *); 
         void addEdgeToTheList(Edge *); 
         void addFaceToTheList(Face *);
         void readListOfVertices(ifstream *, unsigned int);
-        void readListOfEdges(ifstream *, unsigned int);
-        void readListOfFaces(ifstream *, unsigned int);
+        void readListOfEdges(ifstream *, unsigned int, bool);
+        void readListOfFaces(ifstream *, unsigned int, bool);
 };
 
 #endif
