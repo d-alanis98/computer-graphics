@@ -122,11 +122,10 @@ void VLFToVLFFaceOriented::setEdgesAndFacesWithCorrectedOrientation() {
     //We let the user know if the VLF was correctly oriented or not
     printVLFOrientationResult(badOriented);
 
-    /*
+    //TODO handle inward pointing (all edges need to be flipped)
     if(areFacesCorrectlyOriented())
         cout << "All faces are pointing outward" << endl;
     else cout << "All faces are pointing inward" << endl;
-    */
 }
 
 void VLFToVLFFaceOriented::verifyCommonEdgeAndFixIfNecessary(pair<unsigned int, Face*> referencePair, pair<unsigned int, Face*> faceToVerifyPair) {
