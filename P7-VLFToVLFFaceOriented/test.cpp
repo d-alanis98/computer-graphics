@@ -15,6 +15,6 @@ int main(int argc, char **argv) {
     //We create a new VLFToVLFFaceOriented instance
     VLFToVLFFaceOriented *reader = new VLFToVLFFaceOriented();
     reader->setInitialDataFromFile(pathToFile);
-    
+    reader->createVLFFaceOrientedFile(resultVLFFileName);
     return 0;
 }
