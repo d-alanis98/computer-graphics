@@ -6,6 +6,7 @@
 #include <set>
 #include "../Edge/Edge.hpp"
 #include "../Vertex/Vertex.hpp"
+#include "../Vector/Vector.hpp"
 #include "../Face/Face.hpp"
 #include "../../P1-LineDrawingAlgorithms/BresenhamAlgorithm/BresenhamAlgorithm.hpp"
 
@@ -21,7 +22,7 @@ class VLFToPPM {
         map<unsigned int, Edge*> listOfEdges;
         //List of the raw vertices and the transformed vertices (the ones that fit in the raster)
         map<unsigned int, Vertex*> listOfVertices, listOfTransformedVertices;
-        //List of faces
+        //List of faces and the list of faces
         map<unsigned int, Face*> listOfFaces;
         //The raster
         BresenhamAlgorithm *raster;
@@ -31,6 +32,8 @@ class VLFToPPM {
         VLFToPPM();
         //Data exctraction from file
         void setDataFromFile(string);
+        void setOnlyTheEdgesToShow();
+        void setOnlyTheFacesToShow(Vector *);
         //Transformation of the vertices to fit the raster
         double getOptimalScale(double, double);
         void setDegreesToRotate(double);
@@ -57,6 +60,8 @@ class VLFToPPM {
         BresenhamAlgorithm *getRaster();
         //Getter for the list of pixels to draw
         set<Pixel> getPixelsToDraw();
+        //Utils
+        Vector *getFaceNormal(Face *);
 };
 
 

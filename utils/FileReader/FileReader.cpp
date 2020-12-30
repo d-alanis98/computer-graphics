@@ -25,6 +25,15 @@ void FileReader::calculateObjectDimensions() {
     objectDepth = abs(maximumPointInZ - minimumPointInZ);
 }
 
+void FileReader::calculateObjectDimensionsOfListsWithKeys() {
+    //We set the maximum and minimum values in the state
+    setMaximumAndMinimumValuesOfListsWithKeys();
+    //Now we can compute the width, height, and depth of the object
+    objectWidth = abs(maximumPointInX - minimumPointInX);
+    objectHeight = abs(maximumPointInY - minimumPointInY);
+    objectDepth = abs(maximumPointInZ - minimumPointInZ);
+}
+
 double FileReader::getMaximumPointInX() {
     return maximumPointInX;
 }
@@ -133,6 +142,29 @@ void FileReader::setMaximumAndMinimumValues() {
         minimumPointInX = getMinimumX(current, minimumPointInX);
         minimumPointInY = getMinimumY(current, minimumPointInY);
         minimumPointInZ = getMinimumZ(current, minimumPointInZ);
+    }
+}
+
+void FileReader::setMaximumAndMinimumValuesOfListsWithKeys() {
+    //Maximum and minimum initial values
+    maximumPointInX = minimumPointInX = 0;
+    maximumPointInY = minimumPointInY = 0;
+    maximumPointInZ = minimumPointInZ = 0;
+    //Iteration through the map to get the maximum and minimum in a greedy approach
+    for(map<unsigned int, Edge*>::iterator it = listOfEdges.begin(); it != listOfEdges.end(); it++) {
+        Edge *current = it->second;
+        Edge *currentWithFullVertexData = new Edge(
+            listOfVertices[current->getFirstVertexKey()],
+            listOfVertices[current->getSecondVertexKey()]
+        );
+        //Maximum points
+        maximumPointInX = getMaximumX(currentWithFullVertexData, maximumPointInX);
+        maximumPointInY = getMaximumY(currentWithFullVertexData, maximumPointInY);
+        maximumPointInZ = getMaximumZ(currentWithFullVertexData, maximumPointInZ);
+        //Minimum points
+        minimumPointInX = getMinimumX(currentWithFullVertexData, minimumPointInX);
+        minimumPointInY = getMinimumY(currentWithFullVertexData, minimumPointInY);
+        minimumPointInZ = getMinimumZ(currentWithFullVertexData, minimumPointInZ);
     }
 }
 

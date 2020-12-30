@@ -31,6 +31,7 @@ class FileReader {
         virtual int getDataFromFile(string &) = 0;
         //Bounding box
         void calculateObjectDimensions();
+        void calculateObjectDimensionsOfListsWithKeys();
         double getMaximumPointInX();
         double getMaximumPointInY();
         double getMaximumPointInZ();
@@ -41,6 +42,7 @@ class FileReader {
         double getObjectHeight();
         double getObjectDepth();
         void setMaximumAndMinimumValues();
+        void setMaximumAndMinimumValuesOfListsWithKeys();
         //List getters
         map<unsigned int, Vertex*> getListOfVertices();
         map<unsigned int, Edge*> getListOfEdges();

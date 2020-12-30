@@ -6,6 +6,7 @@
 #include "../VLFReader/VLFReader.hpp"
 #include "../Edge/Edge.hpp"
 #include "../Vertex/Vertex.hpp"
+#include "../Vector/Vector.hpp"
 #include "../Transformations/Transformations.hpp"
 #include "../../P1-LineDrawingAlgorithms/BresenhamAlgorithm/BresenhamAlgorithm.hpp"
 
@@ -32,10 +33,10 @@ void VLFToPPM::setDataFromFile(string filePath) {
     //We create an VLFReader instance
     VLFReader *reader = new VLFReader();
     //We validate the status of the process of getting data from the file (0 = OK, -1 = ERROR)
-    if(reader->getDataFromFile(filePath) == -1)
+    if(reader->getDataFromFileWithKeys(filePath) == -1)
         exit(1);
     //We set the object dimensions in state
-    reader->calculateObjectDimensions();
+    reader->calculateObjectDimensionsOfListsWithKeys();
     //We set the relevant data obtained previously in the state
     modelWidth = reader->getObjectWidth();
     modelHeight = reader->getObjectHeight();
@@ -47,7 +48,67 @@ void VLFToPPM::setDataFromFile(string filePath) {
     listOfFaces = reader->getListOfFaces();
     //We set the optimal transformation parameters with the obtained data
     setOptimalTransformationParameters();
+    
     return;
+}
+
+Vector *VLFToPPM::getFaceNormal(Face *currentFace) {
+    //We get the face's edges
+    Edge *firstEdge = listOfEdges[currentFace->getFirstEdgeKey()];
+    Edge *secondEdge = listOfEdges[currentFace->getSecondEdgeKey()];
+    Edge *thirdEdge = listOfEdges[currentFace->getThirdEdgeKey()];
+    //We get the face vertices
+    Vertex *firstVertex = listOfVertices[firstEdge->getFirstVertexKey()];
+    Vertex *secondVertex = listOfVertices[secondEdge->getFirstVertexKey()];
+    Vertex *thirdVertex = listOfVertices[thirdEdge->getFirstVertexKey()];
+    //We operate with vectors
+    Vector *v1 = new Vector(firstVertex->getX(), firstVertex->getY(), firstVertex->getZ());
+    Vector *v2 = new Vector(secondVertex->getX(), secondVertex->getY(), secondVertex->getZ());
+    Vector *v3 = new Vector(thirdVertex->getX(), thirdVertex->getY(), thirdVertex->getZ());
+    //We create new verteices (now representing vectors)
+    Vector *e1 = v1->substract(v2);
+    Vector *e2 = v2->substract(v3);
+    //We make the cross product
+    Vector *crossProductResult = e1->crossProduct(e2);
+    return crossProductResult->normalize();
+}
+
+void VLFToPPM::setOnlyTheFacesToShow(Vector *cameraVector) {
+    map<unsigned int, Face*> listOfFacesToShow;
+    for(map<unsigned int, Face*>::iterator it = listOfFaces.begin(); it != listOfFaces.end(); it++) {
+        unsigned int faceKey = it->first;
+        Face *currentFace = it->second;
+        //We get the normal and the angle between the face normal and the camera
+        Vector *faceNormal = getFaceNormal(currentFace);
+        double angle = faceNormal->getAngleBetween(cameraVector);
+        //We are only going to show the faces whose angle between their normal and the camera vector is bigger than 90° and smaller than 270°
+        if(angle < 90 || angle > 270)
+            continue;
+        listOfFacesToShow.insert(pair<unsigned int, Face *>(faceKey, currentFace));
+    } 
+    //We set the new faces to show
+    this->listOfFaces = listOfFacesToShow;
+    this->setOnlyTheEdgesToShow();
+}
+
+void VLFToPPM::setOnlyTheEdgesToShow() {
+    map<unsigned int, Edge*> listOfEdgesToShow;
+    for(map<unsigned int, Face*>::iterator it = listOfFaces.begin(); it != listOfFaces.end(); it++) {
+        Face *currentFace = it->second;
+        //Edges data
+        unsigned int firstEdgeKey = currentFace->getFirstEdgeKey();
+        unsigned int secondEdgeKey = currentFace->getSecondEdgeKey();
+        unsigned int thirdEdgeKey = currentFace->getThirdEdgeKey();
+        Edge *firstEdge = listOfEdges[firstEdgeKey];
+        Edge *secondEdge = listOfEdges[secondEdgeKey];
+        Edge *thirdEdge = listOfEdges[thirdEdgeKey];
+        //We insert the edges in the new list
+        listOfEdgesToShow.insert(pair<unsigned int, Edge*>(firstEdgeKey, firstEdge));
+        listOfEdgesToShow.insert(pair<unsigned int, Edge*>(secondEdgeKey, secondEdge));
+        listOfEdgesToShow.insert(pair<unsigned int, Edge*>(thirdEdgeKey, thirdEdge));
+    }
+    //We set the edges to show
+    this->listOfEdges = listOfEdgesToShow;
 }
 
 
@@ -78,8 +139,8 @@ void VLFToPPM::setPixelsToDraw(bool keepTrackInState) {
         //We get the current edge from the iterator
         Edge *currentEdge = it->second;
         //We get the vertices
-        Vertex *firstVertex = currentEdge->getFirstVertex();
-        Vertex *secondVertex = currentEdge->getSecondVertex();
+        Vertex *firstVertex = listOfVertices[currentEdge->getFirstVertexKey()];
+        Vertex *secondVertex = listOfVertices[currentEdge->getSecondVertexKey()];
         //And apply the transformations to them
         applyTransformationsToVertex(firstVertex, &x1, &y1);
         applyTransformationsToVertex(secondVertex, &x2, &y2);

@@ -373,7 +373,7 @@ Vertex *crossProduct(Vertex *e1, Vertex *e2) {
     Vertex *result = new Vertex();
     result->setCoordinates(
         (e1->getY() * e2->getZ()) - (e1->getZ() * e2->getY()), //i
-        (e1->getX() * e2->getZ()) - (e1->getZ() * e2->getX()), //j
+        -((e1->getX() * e2->getZ()) - (e1->getZ() * e2->getX())), //j
         (e1->getX() * e2->getY()) - (e1->getY() * e2->getX()) //k
     );
     return result;
