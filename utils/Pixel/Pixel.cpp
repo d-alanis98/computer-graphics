@@ -7,36 +7,36 @@ using namespace std;
 //Constructor
 Pixel::Pixel() { };
 
-Pixel::Pixel(unsigned char r, unsigned char g, unsigned char b) {
+Pixel::Pixel(unsigned int r, unsigned int g, unsigned int b) {
     this->setColor(r, g, b);
 };
 
-Pixel::Pixel(unsigned char r, unsigned char g, unsigned char b, Vector *tridimensionalSpaceCoordinates) {
+Pixel::Pixel(unsigned int r, unsigned int g, unsigned int b, Vector *tridimensionalSpaceCoordinates) {
     this->setColor(r, g, b);
     this->tridimensionalSpaceCoordinates = tridimensionalSpaceCoordinates;
 };
 
-Pixel::Pixel(unsigned char r, unsigned char g, unsigned char b, double x, double y, double z) {
+Pixel::Pixel(unsigned int r, unsigned int g, unsigned int b, double x, double y, double z) {
     this->setColor(r, g, b);
     this->tridimensionalSpaceCoordinates = new Vector(x, y, z);
 };
 
 //Setters and getters
-void Pixel::setColor(unsigned char r, unsigned char g, unsigned char b) {
+void Pixel::setColor(unsigned int r, unsigned int g, unsigned int b) {
     this->r = r;
     this->g = g;
     this->b = b;
 };
 
-void Pixel::setRedColor(unsigned char r) {
+void Pixel::setRedColor(unsigned int r) {
     this->r = r;
 }
 
-void Pixel::setGreenColor(unsigned char g) {
+void Pixel::setGreenColor(unsigned int g) {
     this->g = g;
 }
 
-void Pixel::setBlueColor(unsigned char b) {
+void Pixel::setBlueColor(unsigned int b) {
     this->b = b;
 }
 
@@ -48,15 +48,15 @@ void Pixel::set3DSpaceCoordinates(double x, double y, double z) {
     this->tridimensionalSpaceCoordinates = new Vector(x, y, z);
 };
 
-unsigned char Pixel::getRedColor() {
+unsigned int Pixel::getRedColor() {
     return this->r;
 };
 
-unsigned char Pixel::getGreenColor() {
+unsigned int Pixel::getGreenColor() {
     return this->g;
 };  
 
-unsigned char Pixel::getBlueColor() {
+unsigned int Pixel::getBlueColor() {
     return this->b;
 };
 

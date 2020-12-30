@@ -8,21 +8,24 @@ using namespace std;
 
 class Pixel {
     private:
-        unsigned char r, g, b;
+        unsigned int r, g, b;
         Vector *tridimensionalSpaceCoordinates;
     public:
         //Constructor
         Pixel();
-        Pixel(unsigned char, unsigned char, unsigned char);
-        Pixel(unsigned char, unsigned char, unsigned char, Vector *);
-        Pixel(unsigned char, unsigned char, unsigned char, double, double, double);
+        Pixel(unsigned int, unsigned int, unsigned int);
+        Pixel(unsigned int, unsigned int, unsigned int, Vector *);
+        Pixel(unsigned int, unsigned int, unsigned int, double, double, double);
         //Setters and getters
-        void setColor(unsigned char, unsigned char, unsigned char);
+        void setColor(unsigned int, unsigned int, unsigned int);
+        void setRedColor(unsigned int);
+        void setGreenColor(unsigned int);
+        void setBlueColor(unsigned int);
         void set3DSpaceCoordinates(Vector *);
         void set3DSpaceCoordinates(double, double, double);
-        unsigned char getRedColor();
-        unsigned char getGreenColor();
-        unsigned char getBlueColor();
+        unsigned int getRedColor();
+        unsigned int getGreenColor();
+        unsigned int getBlueColor();
         Vector *get3DSpaceCoordinates();
 };
 

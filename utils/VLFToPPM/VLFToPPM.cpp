@@ -73,6 +73,11 @@ Vector *VLFToPPM::getFaceNormal(Face *currentFace) {
     return crossProductResult->normalize();
 }
 
+/*
+FACE HIDDING ALGORITHM
+To know if a face must be showed, we need to calculate the angle between the face normal and the camera vector, 
+if it is bigger than 90° and smaller than 270° it won't be showed, as it cannot be visible if it has faces in front. 
+*/
 void VLFToPPM::setOnlyTheFacesToShow(Vector *cameraVector) {
     map<unsigned int, Face*> listOfFacesToShow;
     for(map<unsigned int, Face*>::iterator it = listOfFaces.begin(); it != listOfFaces.end(); it++) {
