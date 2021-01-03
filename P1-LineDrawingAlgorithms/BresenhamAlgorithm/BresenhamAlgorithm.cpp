@@ -1,6 +1,10 @@
 #include <iostream>
 #include <set>
+#include <vector>
+#include <float.h>
+#include <cstring>
 #include "BresenhamAlgorithm.hpp"
+#include "../../utils/PixelWithData/PixelWithData.hpp"
 
 using namespace std;
 
@@ -54,6 +58,8 @@ void BresenhamAlgorithm::drawLine(
     int half = longest >> 1;
     bool criterion;
 
+    //We clear the set of pixels to draw
+    initializePixelsToDraw();
     //We start from 0 (the origin of the octants) to the biggest dimension (width or height)
     for(int i = 0; i <= longest; i++) {
         setPixel(x, y, r, g, b);
@@ -79,12 +85,167 @@ void BresenhamAlgorithm::drawLine(
     }
 }
 
+void BresenhamAlgorithm::drawLine( 
+    unsigned int x, 
+    unsigned int y, 
+    unsigned int x2, 
+    unsigned int y2, 
+    PixelWithData *firstPixelData,
+    PixelWithData *secondPixelData
+) {
+    //We get color data from pixel
+    unsigned char r = firstPixelData->getRedColor();
+    unsigned char g = firstPixelData->getGreenColor();
+    unsigned char b = firstPixelData->getBlueColor();
+    //We invoke drawLine with PixelWithData instance
+    drawLine(x, y, x2, y2, r, g, b);
+    //We set the pixel data in state
+    setFirstPixelData(firstPixelData);
+    setSecondPixelData(secondPixelData);
+}
+
+void BresenhamAlgorithm::drawLine(
+    unsigned int x, 
+    unsigned int y, 
+    unsigned int x2, 
+    unsigned int y2, 
+    unsigned char r,
+    unsigned char g,
+    unsigned char b,
+    PixelWithData *firstPixelData,
+    PixelWithData *secondPixelData
+) {
+    //We draw line without the PixelWithData instance
+    drawLine(x, y, x2, y2, r, g, b);
+    //We set the pixel data in state
+    setFirstPixelData(firstPixelData);
+    setSecondPixelData(secondPixelData);
+}
+
 
 
 void BresenhamAlgorithm::addPixelToDraw(unsigned int x, unsigned int y) {
     pixelsToDraw.insert(Pixel(x, y));
+    //We also push it to the vector of pixels (to keep the original order of the Bresenham algorithm and not the sorted one)
+    pixelsVector.push_back(Pixel(x, y));
 }
 
 set<Pixel> BresenhamAlgorithm::getPixelsToDraw() {
     return pixelsToDraw;
+}
+
+
+vector<Pixel> BresenhamAlgorithm::getPixelsToDrawVector() {
+    return pixelsVector;
+}
+
+void BresenhamAlgorithm::initializePixelsToDraw() {
+    pixelsVector.clear();
+}
+
+void BresenhamAlgorithm::initializePixelsWithDataVector(unsigned int vectorSize) {
+    //We clear and resize the vector
+    this->pixelsWithData.clear();
+}
+
+void BresenhamAlgorithm::setZCoordinateForEachPixel() {
+    double firstZCoordinate = firstPixelData->get3DSpaceCoordinates()->getZ();
+    double secondZCoordinate = secondPixelData->get3DSpaceCoordinates()->getZ();
+    unsigned int numberOfPixels = pixelsVector.size() - 1;
+    //We calculate the step
+    double step = (double)(secondZCoordinate - firstZCoordinate) / (double) numberOfPixels;
+    //We initialize the interpolated Z with the first z coordinate
+    double interpolatedZ = firstZCoordinate;
+    //We initialize the pixelsWithData vector (for efficiency), and resize it with the known size (number of pixels + 1)
+    initializePixelsWithDataVector(numberOfPixels + 1);
+    for(Pixel pixel : pixelsVector) {
+        //We insert a new PixelWithData instance with the raster coordinates, color data and interpolated Z coordinate for each pixel
+        insertPixelWithDataToTheSet(pixel.first, pixel.second, interpolatedZ);
+        interpolatedZ += step;
+    }
+}
+
+void BresenhamAlgorithm::applyZBuffer(vector<PixelWithData *> listOfAllPixelsWithData) {
+    initializeSecondaryRaster();
+    for(PixelWithData *currentPixelWithData : listOfAllPixelsWithData) {
+        unsigned int x = (unsigned int) currentPixelWithData->getRasterX();
+        unsigned int y = (unsigned int) currentPixelWithData->getRasterY();
+        //We get the current raster pixel for that coordinates
+        PixelWithData *rasterPixel = secondaryRaster[x][y];
+        //We get the Z coordinate of the current pixel
+        double currentPixelZFrom3DSpace = currentPixelWithData->get3DSpaceCoordinates()->getZ();
+        //We update the new min Z if the condition is met
+        if(currentPixelZFrom3DSpace < rasterPixel->get3DSpaceCoordinates()->getZ())
+            secondaryRaster[x][y] = currentPixelWithData;
+    }
+    //Finally, we set the new data
+    setRasterDataFromSecondaryRaster();
+
+}
+
+void BresenhamAlgorithm::insertPixelWithDataToTheSet(double x, double y, double interpolatedZ) {
+    PixelWithData *pixelWith3DSpaceZCoordinate = new PixelWithData(
+        firstPixelData->getRedColor(),
+        firstPixelData->getGreenColor(),
+        firstPixelData->getBlueColor(),
+        0,
+        0,
+        interpolatedZ
+    );
+    pixelWith3DSpaceZCoordinate->setRasterCoordinates(x, y);
+    pixelsWithData.push_back(pixelWith3DSpaceZCoordinate);
+}
+
+void BresenhamAlgorithm::initializeSecondaryRaster() {
+    vector<PixelWithData *> rasterRow;
+    for(int i = 0; i < RASTER_WIDTH; i++) {
+        rasterRow.clear();
+        for(int j = 0; j < RASTER_HEIGHT; j++) {
+            rasterRow.push_back(new PixelWithData(
+                80,
+                80,
+                80,
+                DBL_MAX,
+                DBL_MAX,
+                DBL_MAX
+            ));
+        }
+        secondaryRaster.push_back(rasterRow);
+    }
+}
+
+
+void BresenhamAlgorithm::setRasterDataFromSecondaryRaster() {
+    for(int i = 0; i < RASTER_WIDTH; i++) {
+        for(int j = 0; j < RASTER_HEIGHT; j++) {
+            PixelWithData *rasterPixelData = secondaryRaster[i][j];
+            setPixel(
+                rasterPixelData->getRasterX(),
+                rasterPixelData->getRasterY(),
+                rasterPixelData->getRedColor(),
+                rasterPixelData->getGreenColor(),
+                rasterPixelData->getBlueColor()
+            );
+        }
+    }
+}
+
+void BresenhamAlgorithm::setFirstPixelData(PixelWithData *firstPixelData) {
+    this->firstPixelData = firstPixelData;
+}
+
+PixelWithData *BresenhamAlgorithm::getFirstPixelData() {
+    return firstPixelData;
+}
+
+void BresenhamAlgorithm::setSecondPixelData(PixelWithData *secondPixelData) {
+    this->secondPixelData = secondPixelData;
+}
+
+PixelWithData *BresenhamAlgorithm::getSecondPixelData() {
+    return secondPixelData;
+}
+
+vector<PixelWithData *> BresenhamAlgorithm::getPixelsWithData() {
+    return pixelsWithData;
 }

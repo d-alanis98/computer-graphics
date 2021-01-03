@@ -8,6 +8,7 @@
 #include "../Vertex/Vertex.hpp"
 #include "../Vector/Vector.hpp"
 #include "../Transformations/Transformations.hpp"
+#include "../PixelWithData/PixelWithData.hpp"
 #include "../../P1-LineDrawingAlgorithms/BresenhamAlgorithm/BresenhamAlgorithm.hpp"
 
 #define PADDING       50
@@ -152,7 +153,7 @@ void VLFToPPM::setPixelsToDraw(bool keepTrackInState) {
         //Finally, we set the pixels to draw
         raster->drawLine(x1, y1, x2, y2, r, g, b);
         //And, if specified, we add those pixels to the state (because the other ones lives in the raster instance and they are generated for every line, so we need a global list of all pixels) 
-        if(keepTrackInState)
+        if(keepTrackInState) 
             addPixelsToDraw(raster->getPixelsToDraw());
     }
 }
@@ -162,13 +163,47 @@ void VLFToPPM::setTotalPixelsToDraw() {
     setPixelsToDraw(true);
 }
 
+void VLFToPPM::setPixelsWithDataToDraw() {
+    unsigned char r = 255, g = 255, b = 255;
+    unsigned int counter = 0;
+
+    for(map<unsigned int, Edge*>::iterator it = listOfEdges.begin(); it != listOfEdges.end(); it++) {
+        unsigned int x1, y1, x2, y2;
+        //We get the current edge from the iterator
+        Edge *currentEdge = it->second;
+        //We get the vertices
+        Vertex *firstVertex = listOfVertices[currentEdge->getFirstVertexKey()];
+        Vertex *secondVertex = listOfVertices[currentEdge->getSecondVertexKey()];
+        //And apply the transformations to them
+        applyTransformationsToVertex(firstVertex, &x1, &y1);
+        applyTransformationsToVertex(secondVertex, &x2, &y2);
+        //We create instances of PixelWithData to store relevant data of each vertex (as 3D space coordinates and color)
+        PixelWithData *firstVertexPixel = new PixelWithData(r, g, b, firstVertex->getX(), firstVertex->getY(), firstVertex->getZ());
+        PixelWithData *secondVertexPixel = new PixelWithData(r, g, b, secondVertex->getX(), secondVertex->getY(), secondVertex->getZ());
+        //Finally, we set the pixels to draw
+        raster->drawLine(x1, y1, x2, y2, r, g, b, firstVertexPixel, secondVertexPixel);
+        //We indicate the raster to calculate the Z coordinate for each pixel
+        raster->setZCoordinateForEachPixel();
+        //We add those pixels to the state (because the other ones lives in the raster instance and they are generated for every line, so we need a global list of all pixels) 
+        addPixelsWithDataToDraw(raster->getPixelsWithData());  
+    }
+}
+
 void VLFToPPM::addPixelsToDraw(set<Pixel> edgePixels) {
-    for(Pixel pix : edgePixels)
-        pixelsToDraw.insert(pix);
+    pixelsToDraw.insert(edgePixels.begin(), edgePixels.end());
+}
+
+void VLFToPPM::addPixelsWithDataToDraw(vector<PixelWithData *> pixelsWithData) {
+    this->pixelsWithData.insert(this->pixelsWithData.end(), pixelsWithData.begin(), pixelsWithData.end());
 }
 
 void VLFToPPM::drawVLFToRaster() {
     setPixelsToDraw();
+    raster->write();
+}
+
+void VLFToPPM::drawVLFToRasterWithZBuffer() {
+    raster->applyZBuffer(pixelsWithData);
     raster->write();
 }
 
@@ -242,6 +277,10 @@ BresenhamAlgorithm *VLFToPPM::getRaster() {
 
 set<Pixel> VLFToPPM::getPixelsToDraw() {
     return pixelsToDraw;
+}
+
+vector<PixelWithData *> VLFToPPM::getPixelsWithData() {
+    return pixelsWithData;
 }
 
 map<unsigned int, Vertex*> VLFToPPM::getListOfVertices() {

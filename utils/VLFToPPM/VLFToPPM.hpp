@@ -8,6 +8,7 @@
 #include "../Vertex/Vertex.hpp"
 #include "../Vector/Vector.hpp"
 #include "../Face/Face.hpp"
+#include "../PixelWithData/PixelWithData.hpp"
 #include "../../P1-LineDrawingAlgorithms/BresenhamAlgorithm/BresenhamAlgorithm.hpp"
 
 using namespace std;
@@ -28,6 +29,8 @@ class VLFToPPM {
         BresenhamAlgorithm *raster;
         //The pixels to draw, it is a set because we don't want repeated values
         set<Pixel> pixelsToDraw;
+        //The pixels to draw with data (such as color, raster coordinates, 3D space coordinates)
+        vector<PixelWithData *> pixelsWithData;
     public:
         VLFToPPM();
         //Data exctraction from file
@@ -49,8 +52,11 @@ class VLFToPPM {
         void setPixelsToDraw(bool);
         void addPixelsToDraw(set<Pixel>);
         void setTotalPixelsToDraw(); 
+        void setPixelsWithDataToDraw();
+        void addPixelsWithDataToDraw(vector<PixelWithData *>);
         //Drawing to the raster
         void drawVLFToRaster();
+        void drawVLFToRasterWithZBuffer();
         //Getters for the lists
         map<unsigned int, Vertex*> getListOfVertices();
         map<unsigned int, Edge*> getListOfEdges();
@@ -60,6 +66,7 @@ class VLFToPPM {
         BresenhamAlgorithm *getRaster();
         //Getter for the list of pixels to draw
         set<Pixel> getPixelsToDraw();
+        vector<PixelWithData *> getPixelsWithData(); 
         //Utils
         Vector *getFaceNormal(Face *);
 };
