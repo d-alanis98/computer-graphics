@@ -1,13 +1,19 @@
 #ifndef VLF_TO_PPM_H
 #define VLF_TO_PPM_H
 
+#define DEFAULT_EDGE_R 100
+#define DEFAULT_EDGE_G 100
+#define DEFAULT_EDGE_B 100
+
 #include <iostream>
 #include <map>
 #include <set>
 #include "../Edge/Edge.hpp"
+#include "../Color/Color.hpp"
 #include "../Vertex/Vertex.hpp"
 #include "../Vector/Vector.hpp"
 #include "../Face/Face.hpp"
+#include "../Scene/Scene.hpp"
 #include "../PixelWithData/PixelWithData.hpp"
 #include "../../P1-LineDrawingAlgorithms/BresenhamAlgorithm/BresenhamAlgorithm.hpp"
 
@@ -31,6 +37,8 @@ class VLFToPPM {
         set<Pixel> pixelsToDraw;
         //The pixels to draw with data (such as color, raster coordinates, 3D space coordinates)
         vector<PixelWithData *> pixelsWithData;
+        //Color of the model edge's lines
+        Color edgeColor;
     public:
         VLFToPPM();
         //Data exctraction from file
@@ -57,6 +65,12 @@ class VLFToPPM {
         //Drawing to the raster
         void drawVLFToRaster();
         void drawVLFToRasterWithZBuffer();
+        void drawVLFToRasterWithZBuffer(Scene *tridimensionalScene) {
+            tridimensionalScene->setPixelsToDraw(pixelsWithData);
+            tridimensionalScene->computePixelsColors();
+            raster->applyZBuffer(tridimensionalScene->getPixelsToDraw());
+            raster->write();
+        }
         //Getters for the lists
         map<unsigned int, Vertex*> getListOfVertices();
         map<unsigned int, Edge*> getListOfEdges();
@@ -67,6 +81,13 @@ class VLFToPPM {
         //Getter for the list of pixels to draw
         set<Pixel> getPixelsToDraw();
         vector<PixelWithData *> getPixelsWithData(); 
+        //Setter and getter for the edge color
+        void setEdgeColor(Color edgeColor) {
+            this->edgeColor = edgeColor;
+        };
+        Color getEdgeColor() {
+            return edgeColor;
+        };
         //Utils
         Vector *getFaceNormal(Face *);
 };

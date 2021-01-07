@@ -5,6 +5,7 @@
 #include "VLFToPPM.hpp"
 #include "../VLFReader/VLFReader.hpp"
 #include "../Edge/Edge.hpp"
+#include "../Color/Color.hpp"
 #include "../Vertex/Vertex.hpp"
 #include "../Vector/Vector.hpp"
 #include "../Transformations/Transformations.hpp"
@@ -28,6 +29,8 @@ VLFToPPM::VLFToPPM() {
     degreesToRotate = 180;
     //We create an instance of the raster
     raster = new BresenhamAlgorithm();
+    //We set the edge color
+    edgeColor = Color(DEFAULT_EDGE_R, DEFAULT_EDGE_G, DEFAULT_EDGE_B);
 }
 
 void VLFToPPM::setDataFromFile(string filePath) {
@@ -139,7 +142,7 @@ void VLFToPPM::setPixelsToDraw() {
 }
 
 void VLFToPPM::setPixelsToDraw(bool keepTrackInState) {
-    unsigned char r = 255, g = 255, b = 255;
+    unsigned char r = edgeColor.getRedColor(), g = edgeColor.getGreenColor(), b = edgeColor.getBlueColor();
     for(map<unsigned int, Edge*>::iterator it = listOfEdges.begin(); it != listOfEdges.end(); it++) {
         unsigned int x1, y1, x2, y2;
         //We get the current edge from the iterator
@@ -164,7 +167,7 @@ void VLFToPPM::setTotalPixelsToDraw() {
 }
 
 void VLFToPPM::setPixelsWithDataToDraw() {
-    unsigned char r = 255, g = 255, b = 255;
+    unsigned char r = edgeColor.getRedColor(), g = edgeColor.getGreenColor(), b = edgeColor.getBlueColor();
     unsigned int counter = 0;
 
     for(map<unsigned int, Edge*>::iterator it = listOfEdges.begin(); it != listOfEdges.end(); it++) {

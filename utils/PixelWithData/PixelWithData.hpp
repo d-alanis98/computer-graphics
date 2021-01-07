@@ -20,6 +20,11 @@ class PixelWithData {
         PixelWithData(unsigned char, unsigned char, unsigned char, Vector *);
         PixelWithData(unsigned char, unsigned char, unsigned char, double, double, double);
         //Setters and getters
+        void setColor(Color pixelColor) {
+            r = pixelColor.getRedColor();
+            g = pixelColor.getGreenColor();
+            b = pixelColor.getBlueColor();
+        }
         void setColor(unsigned char, unsigned char, unsigned char);
         void setRedColor(unsigned char);
         void setGreenColor(unsigned char);
@@ -36,6 +41,13 @@ class PixelWithData {
             return Color(r, g, b);
         };
         Vector *get3DSpaceCoordinates();
+        void printPixelData() {
+            cout << "\tRaster coordinates = (" << rasterX << ", " << rasterY << ")\n";
+            cout << "\tColor = ";
+            getPixelColor().printColors();
+            cout << "\t3D Space coordinates = ";
+            tridimensionalSpaceCoordinates->printVector();
+        }
 };
 
 #endif

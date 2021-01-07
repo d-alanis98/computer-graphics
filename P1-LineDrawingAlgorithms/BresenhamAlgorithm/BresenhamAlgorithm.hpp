@@ -4,6 +4,7 @@
 #include <iostream>
 #include <set>
 #include <vector>
+#include "../../utils/Color/Color.hpp"
 #include "../FHDRaster/FHDRaster.hpp"
 #include "../../utils/PixelWithData/PixelWithData.hpp"
 
@@ -70,6 +71,19 @@ class BresenhamAlgorithm: public FHDRaster {
         //Miscelaneous
         void initializePixelsToDraw();
         void initializePixelsWithDataVector(unsigned int); 
+        //Set data from vector of pixels to draw
+        void setRasterFromPixelsVector(vector<PixelWithData*> pixelsToDraw) {
+            for(PixelWithData *currentPixel : pixelsToDraw) {
+                Color pixelColor = currentPixel->getPixelColor();
+                setPixel(
+                    currentPixel->getRasterX(),
+                    currentPixel->getRasterY(),
+                    pixelColor.getRedColor(),
+                    pixelColor.getGreenColor(),
+                    pixelColor.getBlueColor()
+                );
+            }
+        }
 };
 
 #endif

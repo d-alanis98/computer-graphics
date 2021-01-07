@@ -69,6 +69,7 @@ class Scene {
                     pixelFinalColor,
                     currentPixel->get3DSpaceCoordinates()
                 );
+                pixelWithFinalColor->setRasterCoordinates(currentPixel->getRasterX(), currentPixel->getRasterY());
                 pixelsWithFinalColor.push_back(pixelWithFinalColor);
             }
             pixelsToDraw.clear();

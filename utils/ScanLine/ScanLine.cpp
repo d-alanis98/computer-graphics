@@ -73,8 +73,16 @@ void ScanLine::fillMissingPixels() {
         unsigned int minimumX = pixelsWithCurrentY[0]->getRasterX();
         unsigned int maximumX = pixelsWithCurrentY[pixelsWithCurrentY.size() - 1]->getRasterX();
         //PixelWithData filling
-        for(int x = minimumX + 1; x < maximumX; x++)
+        for(int x = minimumX + 1; x < maximumX; x++) {
             raster->setPixel(x, currentY, r, g, b);
+            //TODO: INTERPOLATE X, Y AND Z FOR THE FILL PIXEL
+            //CREATE A VECTOR OF TOTAL PIXELS WITH THE ORIGINAL EDGE PIXELS AND THE FILL PIXELS
+            //CREATE THE GETTER AND SETTER FOR THAT VECTOR
+            //CHECK WHY THIS FILL IS UNPREDICTABLE IN SOME AREAS
+            PixelWithData *faceFillPixel = new PixelWithData(
+
+            );
+        }
     }
 }
 
