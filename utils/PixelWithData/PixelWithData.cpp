@@ -1,11 +1,17 @@
 #include <iostream>
 #include "./PixelWithData.hpp"
+#include "../Color/Color.hpp"
 #include "../Vector/Vector.hpp"
 
 using namespace std;
 
 //Constructor
 PixelWithData::PixelWithData() { };
+
+PixelWithData::PixelWithData(Color pixelColor, Vector *tridimensionalSpaceCoordinates) {
+    this->setColor(pixelColor.getRedColor(), pixelColor.getGreenColor(), pixelColor.getBlueColor());
+    this->tridimensionalSpaceCoordinates = tridimensionalSpaceCoordinates;
+}
 
 PixelWithData::PixelWithData(unsigned char r, unsigned char g, unsigned char b) {
     this->setColor(r, g, b);

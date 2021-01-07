@@ -109,6 +109,10 @@ Vector *Vector::crossProduct(Vector *other) {
     );
 }
 
+double Vector::getDistanceTo(Vector *other) {
+    return sqrt(pow(this->x - other->getX(), 2) + pow(this->y - other->getY(), 2) + pow(this->z - other->getZ(), 2));
+}
+
 double Vector::getAngleBetween(Vector *other) {
     return acos(this->dotProduct(other) / ( this->getModule() * other->getModule())) * 180 / PI;
 }

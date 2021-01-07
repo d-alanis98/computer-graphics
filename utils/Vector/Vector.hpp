@@ -30,6 +30,7 @@ class Vector {
         Vector *substract(Vector *);
         double dotProduct(Vector *);
         Vector *crossProduct(Vector *);
+        double getDistanceTo(Vector *);
         double getAngleBetween(Vector *);
         //Utils
         void printVector(); 

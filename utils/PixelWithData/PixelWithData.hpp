@@ -2,6 +2,7 @@
 #define PIXEL_WITH_DATA_H
 
 #include <iostream>
+#include "../Color/Color.hpp"
 #include "../Vector/Vector.hpp"
 
 using namespace std;
@@ -14,6 +15,7 @@ class PixelWithData {
     public:
         //Constructor
         PixelWithData();
+        PixelWithData(Color, Vector *);
         PixelWithData(unsigned char, unsigned char, unsigned char);
         PixelWithData(unsigned char, unsigned char, unsigned char, Vector *);
         PixelWithData(unsigned char, unsigned char, unsigned char, double, double, double);
@@ -30,6 +32,9 @@ class PixelWithData {
         unsigned char getRedColor();
         unsigned char getGreenColor();
         unsigned char getBlueColor();
+        Color getPixelColor() {
+            return Color(r, g, b);
+        };
         Vector *get3DSpaceCoordinates();
 };
 
